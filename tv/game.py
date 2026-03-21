@@ -220,6 +220,9 @@ class TerminalVelocity:
             logging.info("starting game loop")
             winners = None
 
+            if self.isolated:
+                self.isolation_boot()
+
             logging.info("initializing player bots logic")
             for player in self.players.values():
                 player.bot_logic.initialize(
@@ -464,9 +467,16 @@ class TerminalVelocity:
                 self.asteroids.add(drop_position)
                 count -= 1
 
+    def isolation_boot(self):
+        """
+        Start the isolated bot logic for all players.
+        """
+        for player in self.players.values():
+            player.start_bot()
+
     def isolation_cleanup(self):
         """
-        Stop the bot logic subprocesses for all players.
+        Stop the isolated bot logic for all players.
         """
         for player in self.players.values():
             player.stop_bot()
