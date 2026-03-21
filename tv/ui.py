@@ -126,12 +126,14 @@ class TerminalVelocityUI:
             else:
                 winner_message = ""
 
-            player_line = f"{player}_{player.ship_number} {player.hp}hp {player.credits}$ {self.term.clear_eol}"
+            player_line = f"{player}_{player.ship_number}{self.term.clear_eol}"
             engines_bar = (player.power_distribution[ENGINES] * '█').ljust(MAX_POWER, '▒')
             shields_bar = (player.power_distribution[SHIELDS] * '█').ljust(MAX_POWER, '▒')
             lasers_bar = (player.power_distribution[LASERS] * '█').ljust(MAX_POWER, '▒')
 
-            stats_line = f"E{engines_bar} S{shields_bar} L{lasers_bar} C{player.cargo * '{}':<4}"
+            stats_line = (
+                f"E{engines_bar} S{shields_bar} L{lasers_bar} C{player.cargo * '{}':<4} {player.hp}hp {player.credits}${self.term.clear_eol}"
+            )
 
             player_row = (idx + 1) * 2
             stats_row = player_row + 1
