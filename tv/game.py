@@ -86,6 +86,8 @@ class Player:
         self.position = None
         self.hp = MAX_HP
         self.ship_number = 1
+        self.kills = 0
+        self.delivered_asteroids = 0
         self.cargo = 0
         self.power_distribution = {
             ENGINES: 1,
@@ -425,6 +427,7 @@ class TerminalVelocity:
                     target_player.ship_number += 1
 
                     player.credits += stolen_credits
+                    player.kills += 1
 
                     logging.info("%s was destroyed by %s! %s$ stolen", target_player, player, stolen_credits)
             else:
@@ -439,6 +442,7 @@ class TerminalVelocity:
 
             player.credits += delivered_asteroids * MINING_REWARD
             player.cargo = 0
+            player.delivered_asteroids += delivered_asteroids
 
             if delivered_asteroids:
                 logging.info("%s delivered %s asteroids!", player, delivered_asteroids)
