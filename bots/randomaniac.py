@@ -7,13 +7,13 @@ class BotLogic:
     """
     A bot that just moves randomly and reconfigures the spaceship randomly.
     """
-    def initialize(self):
+    def initialize(self, map_radius, players, turns, home_base_positions):
         """
         This bot doesn't need to initialize anything.
         """
         pass
 
-    def turn(self, hp, cargo, position, power_distribution, radar_contacts):
+    def turn(self, turn_number, hp, ship_number, cargo, position, power_distribution, radar_contacts, leader_board):
         """
         This bot chooses its actions completely at random.
         """
