@@ -221,6 +221,7 @@ class TerminalVelocity:
             logging.info("initializing player bots logic")
             for player in self.players.values():
                 player.bot_logic.initialize(
+                    player_name=player.name,
                     map_radius=self.map_radius,
                     players=list(p.name for p in self.players.values()),
                     turns=self.turns,

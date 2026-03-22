@@ -75,7 +75,7 @@ the docstrings to implement your logic :)
 
 ```python
 class BotLogic:
-    def initialize(self, map_radius, players, turns, home_base_positions):
+    def initialize(self, player_name, map_radius, players, turns, home_base_positions):
         """
         Here you can prepare your bot for the game.
         Use it to initialize variables, prepare strategies, etc.
@@ -101,19 +101,20 @@ The **turn()** method is where the magic of your bot happens!
 ### Inputs:
 
 For the initialize() method:
+- player_name: the name of your player (so you can for instance identify your score in the leader board).
 - map_radius: the radius of the map. The home base is at position (0, 0). The map extends to -map_size 
   and +map_size in both axes.
-- players: the list of player names
-- turns: the number of turns the game will last
-- home_base_positions: the set of positions that the base covers
+- players: the list of player names.
+- turns: the number of turns the game will last.
+- home_base_positions: the set of positions that the base covers.
 
 For the turn() method:
-- turn_number: the number of the current turn, starting at 0
-- hp: how many hitpoints your spaceship has left
+- turn_number: the number of the current turn, starting at 0.
+- hp: how many hitpoints your spaceship has left.
 - ship_number: every time your ship is destroyed and a new one is created, this number will increment. 
   This lets you know if you're dying too much :)
-- cargo: how many asteroids you are currently carrying
-- position: your current position in space (x, y)
+- cargo: how many asteroids you are currently carrying.
+- position: your current position in space (x, y).
 - power_distribution: a dictionary letting you know your current power configuration, like this:
 
 ```python
