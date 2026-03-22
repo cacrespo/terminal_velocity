@@ -52,7 +52,7 @@ class RemoteBotLogicClient:
         """
         Ask the bot in the container for an action and return it.
         """
-        return self.remote_call("turn", {
+        turn_return_value = self.remote_call("turn", {
             "turn_number": turn_number,
             "hp": hp,
             "ship_number": ship_number,
@@ -62,6 +62,10 @@ class RemoteBotLogicClient:
             "radar_contacts": {f"{p.x},{p.y}": thing for p, thing in radar_contacts.items()},
             "leader_board": leader_board,
         }, TURN_TIMEOUT)
+
+        self.icon = self.remote_call(".icon", {}, TURN_TIMEOUT)
+
+        return turn_return_value
 
     def start_bot_server(self):
         """
@@ -134,24 +138,29 @@ def bot_server(bot_type, port):
             kw_args = message["kw_args"]
 
             # parse the arguments, converting the special cases
-            if method_name == "initialize":
-                # convert home base positions to Position objects
-                kw_args["home_base_positions"] = [
-                    Position(x, y) for x, y in kw_args["home_base_positions"]
-                ]
-            elif method_name == "turn":
-                # convert position to Position object
-                kw_args["position"] = Position(*kw_args["position"])
-                # convert radar contact positions to Position objects
-                kw_args["radar_contacts"] = {
-                    Position(*map(int, pos.split(","))): thing
-                    for pos, thing in kw_args["radar_contacts"].items()
-                }
+            if method_name.startswith("."):
+                # this is a call to get an attribute, not a method, so we just return the value of the attribute
+                print("getting attribute", method_name)
+                bot_result = getattr(bot_logic, method_name[1:], None)
+            else:
+                if method_name == "initialize":
+                    # convert home base positions to Position objects
+                    kw_args["home_base_positions"] = [
+                        Position(x, y) for x, y in kw_args["home_base_positions"]
+                    ]
+                elif method_name == "turn":
+                    # convert position to Position object
+                    kw_args["position"] = Position(*kw_args["position"])
+                    # convert radar contact positions to Position objects
+                    kw_args["radar_contacts"] = {
+                        Position(*map(int, pos.split(","))): thing
+                        for pos, thing in kw_args["radar_contacts"].items()
+                    }
 
-            print("calling method", method_name)
-            bot_result = getattr(bot_logic, method_name)(**kw_args)
+                print("calling method", method_name)
+                bot_result = getattr(bot_logic, method_name)(**kw_args)
 
-            print("method", method_name, "returned", bot_result)
+            print(method_name, "returned", bot_result)
             result = {"worked": True, "return_value": bot_result}
         except Exception as err:
             print("method", method_name, "raised an error:", err)
