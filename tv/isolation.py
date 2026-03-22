@@ -34,6 +34,7 @@ class RemoteBotLogicClient:
         self.bot_type = bot_type
         self.port = None
         self.bot_server_process = None
+        self.socket = None
 
     def initialize(self, player_name, map_radius, players, turns, home_base_positions):
         """
@@ -69,12 +70,19 @@ class RemoteBotLogicClient:
         self.port = RemoteBotLogicClient.LAST_USED_PORT + 1
         RemoteBotLogicClient.LAST_USED_PORT = self.port
 
-        # docker run bot-server --bot-type <type> --port <port>
+        # launch the container with the bot
         self.bot_server_process = subprocess.Popen(
             f"docker run -p {self.port}:5000 terminal-velocity-bot-server --bot-type {self.bot_type} --port 5000",
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
             shell=True,
         )
+
+        time.sleep(1)  # give the container some time to start
+
+        # connect to the remote bot
+        context = zmq.Context()
+        self.socket = context.socket(zmq.REQ)
+        self.socket.connect(f"tcp://localhost:{self.port}")
 
     def stop_bot_server(self):
         """
@@ -86,14 +94,10 @@ class RemoteBotLogicClient:
         """
         Call a method on the remote bot.
         """
-        context = zmq.Context()
-        socket = context.socket(zmq.REQ)
-        socket.setsockopt(zmq.RCVTIMEO, timeout)
-        socket.connect(f"tcp://localhost:{self.port}")
-
-        socket.send_string(json.dumps({"method_name": method_name, "kw_args": kw_args}))
+        self.socket.setsockopt(zmq.RCVTIMEO, timeout)
+        self.socket.send_string(json.dumps({"method_name": method_name, "kw_args": kw_args}))
         try:
-            result = json.loads(socket.recv())
+            result = json.loads(self.socket.recv())
         except zmq.Again as err:
             raise RemoteBotTimmeout() from err
 
