@@ -31,8 +31,8 @@ The rules are pretty simple:
       If you use 3 generators for the engines, you can jump up to 3 tiles away in a single turn. If 
       you have no generators assigned to the engines, then you can't move!
     - **Shields reduce the chances you get hit** by enemy fire. Each generator used on the shields 
-      reduces the chances of getting hit by 20%. So if you use 3 generators for the shields, you 
-      have 60% less chances to get hit. If you have no generators assigned to the shields, then you 
+      reduces the chances of getting hit by 30%. So if you use 3 generators for the shields, you 
+      have 90% less chances to get hit. If you have no generators assigned to the shields, then you 
       will get hit every time!
     - **Lasers increase the damage** you do when hitting the opponent. Each generator used on the 
       lasers increases the damage y 1 hitpoint. So if you use 3 generators for the lasers, you do 3 

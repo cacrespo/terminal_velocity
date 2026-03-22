@@ -410,7 +410,7 @@ class TerminalVelocity:
         ]
 
         for target_player in targets:
-            hit_chance = 1 - 0.2 * target_player.power_distribution[SHIELDS]
+            hit_chance = 1 - 0.3 * target_player.power_distribution[SHIELDS]
             if random.random() < hit_chance:
                 target_player.hp = max(0, target_player.hp - damage)
 
