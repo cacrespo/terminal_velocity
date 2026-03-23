@@ -162,6 +162,21 @@ class TerminalVelocityUI:
                 self.term.clear_eol,
             )
 
+        # after the last player row, show recent events
+        map_last_row = self.game.map_radius * 2 + 1
+        players_last_row = player_row
+
+        events_start_row = players_last_row + 3
+        events_count = map_last_row - events_start_row
+
+        for idx, event in enumerate(self.game.events[-events_count:]):
+            event_row = events_start_row + idx
+
+            print(
+                self.term.move(event_row, column),
+                event, self.term.clear_eol,
+            )
+
     @contextmanager
     def show(self):
         """

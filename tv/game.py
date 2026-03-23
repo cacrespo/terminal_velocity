@@ -153,6 +153,9 @@ class TerminalVelocity:
         self.ui = ui
         self.isolated = isolated
 
+        # important events to show in the UI
+        self.events = []
+
         if self.ui:
             self.ui.initialize(self)
 
@@ -334,8 +337,10 @@ class TerminalVelocity:
                 leader_board={p.name: p.credits for p in self.players.values()},
             )
         except RemoteBotError as err:
+            self.events.append(f"{player.name} error! {err}")
             return False, "remote bot error: " + str(err)
         except RemoteBotTimmeout:
+            self.events.append(f"{player.name} timeout!")
             return False, "remote bot didn't answer in time"
 
         if action:
@@ -452,6 +457,7 @@ class TerminalVelocity:
                     player.credits += stolen_credits
                     player.kills += 1
 
+                    self.events.append(f"{player.name} destroyed {target_player.name}")
                     logging.info("%s was destroyed by %s! %s$ stolen", target_player, player, stolen_credits)
             else:
                 logging.info("%s attacked %s but missed!", player, target_player)
@@ -468,6 +474,7 @@ class TerminalVelocity:
             player.delivered_asteroids += delivered_asteroids
 
             if delivered_asteroids:
+                self.events.append(f"{player.name} delivered {delivered_asteroids} asteroids")
                 logging.info("%s delivered %s asteroids!", player, delivered_asteroids)
 
     def drop_asteroids(self, center, count):
