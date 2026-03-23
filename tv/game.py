@@ -457,7 +457,7 @@ class TerminalVelocity:
                     player.credits += stolen_credits
                     player.kills += 1
 
-                    self.events.append(f"{player.name} destroyed {target_player.name}")
+                    self.events.append(f"{player.name} destroyed {target_player.name} stealing {stolen_credits}$")
                     logging.info("%s was destroyed by %s! %s$ stolen", target_player, player, stolen_credits)
             else:
                 logging.info("%s attacked %s but missed!", player, target_player)
