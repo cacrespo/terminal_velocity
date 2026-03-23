@@ -30,7 +30,7 @@ class BotLogic:
         self.player_name = player_name
         self.map_radius = map_radius
         self.home_base_positions = list(home_base_positions)
-        self.icon = "👵🐴"
+        self.icon = "F:"
 
         # Memoria persistente del mapa
         self.map_memory = {}

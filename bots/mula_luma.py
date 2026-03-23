@@ -29,7 +29,7 @@ class BotLogic:
         self.players = players
         self.total_turns = turns
         self.home_base_positions = list(home_base_positions)
-        self.icon = "🐴👵"
+        self.icon = "_°"
 
         # Memory
         self.map_memory = {}  # Position -> (type, last_seen_turn)
